@@ -446,7 +446,7 @@ shinyServer(function(input, output) {
   
   output$downloadData <- downloadHandler(
     filename = function() {
-      paste("selected_data_", format(Sys.time()), ".", input$format, sep = "")
+      paste("selected_data_", format(Sys.time()), ".csv", sep = "")
     },
     content = function(file) {
       data_to_download <- DATA6()[, input$choose_vars, drop = FALSE]
