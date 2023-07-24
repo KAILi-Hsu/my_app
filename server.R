@@ -1,14 +1,18 @@
 library(shiny)
+library(shinydashboard)
+
 library(jpeg)
 library(imager)
 library(grid)
 library(gridExtra)
 library(OpenImageR)
-library(mxnet)
+
 library(DT)
-library(pROC)
 library(class)
 library(e1071)
+library(pROC)
+
+library(mxnet)
 
 #讀取照片的function
 
@@ -111,7 +115,7 @@ shinyServer(function(input, output) {
   
   output$plot2 <- renderPlot({
     img = IMAGE2()
-    if (is.null(input$files)) {
+    if (is.null(input$files2)) {
       
       Show_img(img)
       
@@ -142,7 +146,7 @@ shinyServer(function(input, output) {
       col_select <- floor((dim(resize_img)[2] - 224) / 2) + 1:224
       test_img_array[,,,1] <- resize_img[row_select,col_select,]
       
-      my_model2 = mx.model.load("test2_ONE(9)", iteration = 100)
+      my_model2 = mx.model.load("test50_ONE", iteration = 0)
       pred_test <-  predict(model = my_model2, X = test_img_array, ctx = mx.gpu(5))
       
       #score <- round(pred_test[2,],4)
@@ -197,7 +201,9 @@ shinyServer(function(input, output) {
   output$choose_columns6 <- renderUI({
     dat = DATA4()
     if (is.null(dat)|is.null(input$C)) {return()} else {
-      colnames <- colnames(dat)
+      #target_cols <- sapply(dat, function(col) length(levels(as.factor(col))) > 20 && is.numeric(col))
+      target_cols <- sapply(dat, function(col) is.numeric(col))
+      colnames <- colnames(dat[target_cols])
       selectInput("D", h4("Choose a predictor variable1(x):"), choices = colnames[which(colnames!= input$C)])
     }
   })
@@ -206,12 +212,12 @@ shinyServer(function(input, output) {
     dat = DATA4()
     
     if (is.null(dat)|is.null(input$C) |is.null(input$D)) {return()} else {
-      colnames <- colnames(dat)
+      #target_cols <- sapply(dat, function(col) length(levels(as.factor(col))) > 20 && is.numeric(col))
+      target_cols <- sapply(dat, function(col) is.numeric(col))
+      colnames <- colnames(dat[target_cols])
       selectInput("E", h4("Choose a predictor variable2(x):"), choices = colnames[!(colnames %in% c(input$C, input$D))])
     }
   })
-  
-  output$out4 <- renderPrint(input$method)
   
   DATA5 <- reactive({
     dat = DATA4()
@@ -243,7 +249,19 @@ shinyServer(function(input, output) {
     }
   })
   
+  
+  IMAGE3 = reactive({
+    if (is.null(input$files3)) {
+      
+      img <- readImage("0004.png")
+      return(img)
+      
+    } 
+  })
+  
+  
   output$roc_test1 <- renderPlot({
+    img <- IMAGE3()
     data_list <- DATA5()
     train_X = data_list[[1]]
     valid_X = data_list[[2]]
@@ -252,10 +270,19 @@ shinyServer(function(input, output) {
     valid_Y = data_list[[5]]
     test_Y = data_list[[6]]
     
-    
-    if (is.null(train_X)|is.null(valid_X) |is.null(test_X)|is.null(train_Y)|is.null(valid_Y)|is.null(test_Y)) {return()} else {
+    if (is.null(input$files3)) {
       
-      if(input$method == 1){ 
+      Show_img(img)
+      
+    } else {
+      
+      if (is.null(train_X)|is.null(valid_X) |is.null(test_X)|is.null(train_Y)|is.null(valid_Y)|is.null(test_Y)) {return()} else {
+        
+        dat <- numeric(4)
+        
+        library(pROC)
+        
+        par(mfrow = c(2, 2))
         
         #linear Discriminant
         print(train_Y)
@@ -270,12 +297,16 @@ shinyServer(function(input, output) {
         best_pos <- which.max(roc_valid$sensitivities + roc_valid$specificities)
         best_cut <- roc_valid$thresholds[best_pos]
         
-        tab_test <- table(test_pred >= best_cut, test_Y)
-        sens <- tab_test[2,2] / sum(tab_test[,2])
-        spec <- tab_test[1,1] / sum(tab_test[,1])
+        test_pred_numeric <- as.numeric(as.character(test_pred))
+        tab_test <- table(test_pred_numeric >= best_cut, test_Y)
+        tab_test <- addmargins(tab_test)  
+        sens <- tab_test[2, 2] / tab_test["Sum", 2]  
+        spec <- tab_test[1, 1] / tab_test[1, "Sum"] 
         
         roc_test <- roc(test_Y ~ test_pred)
-        plot(roc_test, xlab = "1 - Specificity", ylab = "Sensitivity" )
+        plot(roc_test, xlab = "1 - Specificity", ylab = "Sensitivity", main = "linear Discriminant")
+        dat[1] <-round( roc_test$auc, 4)
+        
         
         points(spec, sens, pch = 19)
         text(0.5, 0.5, paste0('AUC(valid) = ', formatC(roc_valid$auc, digits = 3, format = 'f'),
@@ -283,16 +314,7 @@ shinyServer(function(input, output) {
                               '\nSpec = ', formatC(spec, digits = 3, format = 'f'),
                               '\nAUC(test) = ', formatC(roc_test$auc, digits = 3, format = 'f')), col = 'red')
         
-        output$summary3 <- renderPrint({
-          score <- round(roc_test$auc ,4)
-          HTML(paste0(' 在線性區別分析(Linear Discriminant Analysis，LDA）模型下，'),'\n',
-               '使用', input$C, '和', input$D, '來預測', input$E,'的AUC分數是：', score)
-          
-        })
         
-      }
-      
-      if(input$method == 2){ 
         
         #logistic regression
         
@@ -303,16 +325,19 @@ shinyServer(function(input, output) {
         
         library(pROC)
         
-        roc_valid <- roc(valid_Y ~ valid_pred)
+        roc_valid2 <- roc(valid_Y ~ valid_pred)
         best_pos <- which.max(roc_valid$sensitivities + roc_valid$specificities)
         best_cut <- roc_valid$thresholds[best_pos]
         
-        tab_test <- table(test_pred >= best_cut, test_Y)
-        sens <- tab_test[2,2] / sum(tab_test[,2])
-        spec <- tab_test[1,1] / sum(tab_test[,1])
+        test_pred_numeric <- as.numeric(as.character(test_pred))
+        tab_test <- table(test_pred_numeric >= best_cut, test_Y)
+        tab_test <- addmargins(tab_test)  
+        sens <- tab_test[2, 2] / tab_test["Sum", 2]  
+        spec <- tab_test[1, 1] / tab_test[1, "Sum"] 
         
         roc_test <- roc(test_Y ~ test_pred)
-        plot(roc_test, xlab = "1 - Specificity", ylab = "Sensitivity" )
+        plot(roc_test, xlab = "1 - Specificity", ylab = "Sensitivity", main = "logistic regression")
+        dat[2] <-round( roc_test$auc, 4)
         
         points(spec, sens, pch = 19)
         text(0.5, 0.5, paste0('AUC(valid) = ', formatC(roc_valid$auc, digits = 3, format = 'f'),
@@ -320,15 +345,6 @@ shinyServer(function(input, output) {
                               '\nSpec = ', formatC(spec, digits = 3, format = 'f'),
                               '\nAUC(test) = ', formatC(roc_test$auc, digits = 3, format = 'f')), col = 'red')
         
-        output$summary3 <- renderPrint({
-          score <- round(roc_test$auc ,4)
-          HTML(paste0(' 在羅吉斯迴歸（Logistic regression）模型下，'),'\n',
-               '使用', input$C, '和', input$D, '來預測', input$E,'的AUC分數是：', score)
-        })
-        
-      }
-      
-      if(input$method == 3){ 
         
         #Naive Bayes Classification
         
@@ -343,12 +359,15 @@ shinyServer(function(input, output) {
         best_pos <- which.max(roc_valid$sensitivities + roc_valid$specificities)
         best_cut <- roc_valid$thresholds[best_pos]
         
-        tab_test <- table(test_pred >= best_cut, test_Y)
-        sens <- tab_test[2,2] / sum(tab_test[,2])
-        spec <- tab_test[1,1] / sum(tab_test[,1])
+        test_pred_numeric <- as.numeric(as.character(test_pred))
+        tab_test <- table(test_pred_numeric >= best_cut, test_Y)
+        tab_test <- addmargins(tab_test)  
+        sens <- tab_test[2, 2] / tab_test["Sum", 2]  
+        spec <- tab_test[1, 1] / tab_test[1, "Sum"] 
         
         roc_test <- roc(test_Y ~ test_pred)
-        plot(roc_test, xlab = "1 - Specificity", ylab = "Sensitivity" )
+        plot(roc_test, xlab = "1 - Specificity", ylab = "Sensitivity", main = "Naive Bayes Classification")
+        dat[3] <-round( roc_test$auc, 4)
         
         points(spec, sens, pch = 19)
         text(0.5, 0.5, paste0('AUC(valid) = ', formatC(roc_valid$auc, digits = 3, format = 'f'),
@@ -356,15 +375,7 @@ shinyServer(function(input, output) {
                               '\nSpec = ', formatC(spec, digits = 3, format = 'f'),
                               '\nAUC(test) = ', formatC(roc_test$auc, digits = 3, format = 'f')), col = 'red')
         
-        output$summary3 <- renderPrint({
-          score <- round(roc_test$auc ,4)
-          HTML(paste0(' 在單純貝氏分類器（Naïve Bayes Classification）模型下，'),'\n',
-               '使用', input$C, '和', input$D, '來預測', input$E,'的AUC分數是：', score)
-        })
         
-      }
-      
-      if(input$method == 4){ 
         
         #k-nearest neighbor algorithm
         
@@ -377,27 +388,40 @@ shinyServer(function(input, output) {
         best_pos <- which.max(roc_valid$sensitivities + roc_valid$specificities)
         best_cut <- roc_valid$thresholds[best_pos]
         
-        tab_test <- table(attr(test_pred, 'prob') >= best_cut, test_Y)
-        sens <- tab_test[2,2] / sum(tab_test[,2])
-        spec <- tab_test[1,1] / sum(tab_test[,1])
+        test_pred_numeric <- as.numeric(as.character(test_pred))
+        tab_test <- table(test_pred_numeric >= best_cut, test_Y)
+        tab_test <- addmargins(tab_test)  
+        sens <- tab_test[2, 2] / tab_test["Sum", 2]  
+        spec <- tab_test[1, 1] / tab_test[1, "Sum"] 
         
         roc_test <- roc(test_Y ~ attr(test_pred, 'prob'), direction = '>')
-        plot(roc_test, xlab = "1 - Specificity", ylab = "Sensitivity" )
+        plot(roc_test, xlab = "1 - Specificity", ylab = "Sensitivity", main = "k-nearest neighbor algorithm")
+        dat[4] <-round( roc_test$auc, 4)
         
         text(0.5, 0.5, paste0('AUC(valid) = ', formatC(roc_valid$auc, digits = 3, format = 'f'),
                               '\nSens = ', formatC(sens, digits = 3, format = 'f'),
                               '\nSpec = ', formatC(spec, digits = 3, format = 'f'),
                               '\nAUC(test) = ', formatC(roc_test$auc, digits = 3, format = 'f')), col = 'red')
+
         
         output$summary3 <- renderPrint({
-          score <- round(roc_test$auc ,4)
-          HTML(paste0(' 在K-近鄰演算法（K-nearest neighbors, KNN）模型下，'),'\n',
-               '使用', input$C, '和', input$D, '來預測', input$E,'的AUC分數是：', score)
+          
+          num <- which.max(dat)
+          score <- dat[which.max(dat)]
+          
+          if(num == 1){
+            HTML(paste0("線性區別分析(Linear Discriminant Analysis，LDA）模型下，有最大的AUC: ",score))
+          } else if (num == 2){
+            HTML(paste0("羅吉斯迴歸（Logistic regression）模型下，有最大的AUC: ",score))
+          } else if (num == 3){
+            HTML(paste0("單純貝氏分類器（Naïve Bayes Classification）模型下，有最大的AUC: ",score))
+          } else {
+            HTML(paste0("K-近鄰演算法（K-nearest neighbors, KNN）模型下，有最大的AUC: ",score))
+          }
+          
         })
-        
-      }
-    } 
-    
+      } 
+    }
   })
   
   #[分頁4]Panel Function
@@ -442,7 +466,9 @@ shinyServer(function(input, output) {
                   scrollX = TRUE
     ))
     
-  },server = FALSE)
+  }
+  #,server = FALSE
+  )
   
   output$downloadData <- downloadHandler(
     filename = function() {
