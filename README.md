@@ -12,8 +12,8 @@ Record my CODE.
 An APP written using shiny and specifically using shinydashboard.
 The content mainly has four pages:
 1. Chest X-ray prediction of left ventricular dysfunction: upload a chest X-ray and see if the model judges whether the person has left ventricular dysfunction.
-2. Identify the Straw Hat Crew: Upload a photo and see who the model recognizes that this picture is whom in the Straw Hat Crew?(Only including Luffy, Zoro, Sanji, Boo, Nami, Chopper, Robin, Franky, Brook, 9 people)
-3. Binary classifier comparison: upload the file, and select the target and predictor variables, and compare the AUC of the four models.(The four models are: Linear Discriminant Analysis (LDA), Logistic regression, Naïve Bayes Classification and K-nearest neighbors (KNN))
+2. Identify the Straw Hat Crew: Upload a photo and see who the model recognizes that this picture is whom in the Straw Hat Crew? (Only including Luffy, Zoro, Sanji, Boo, Nami, Chopper, Robin, Franky, Brook, 9 people)
+3. Binary classifier comparison: upload the file, and select the target and predictor variables, and compare the AUC of the four models. (The four models are: Linear Discriminant Analysis (LDA), Logistic regression, Naïve Bayes Classification and K-nearest neighbors (KNN))
 4. Panel Function: Practice using box and tabBox to put some commonly used ControlPanel functions in shiny, including single selection, multi-selection, slider, time selection, uploading files, table presentation, and downloading files.
 
 
