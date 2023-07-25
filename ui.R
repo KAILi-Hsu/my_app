@@ -47,7 +47,8 @@ shinyUI(
                     menuItem("胸部X光左心室功能障礙預測", tabName = "X_tab"),
                     menuItem("識別草帽一夥人!", tabName = "ONE_tab"),
                     menuItem("二元分類器比較", tabName = "Class_tab"),
-                    menuItem("Panel Function", tabName = "Function_tab")
+                    menuItem("Panel Function", tabName = "Function_tab"),
+                    menuItem("The feedback", tabName = "feedback_tab")
                   )
                 ),
                 
@@ -61,19 +62,25 @@ shinyUI(
                             br(), 
                             plotOutput("plot"),
                             br(), 
+                            #tags$style(type='text/css', '#summary {background-color: rgba(250,213,154,0.6); color: rgba(57,36,3)}'),
                             verbatimTextOutput("summary"),
-                            verbatimTextOutput("C_index")
+                            uiOutput("feedback1")
+                            
+                            #verbatimTextOutput("C_index")
                     ),
                     
                     # ONE tab content
                     tabItem(tabName = "ONE_tab",
-                            fileInput("files2", label = h4("上傳一張圖片吧！"), multiple = FALSE, accept = "image"),
+                            fileInput("files2", label = h4(tags$b("上傳一張圖片吧！")), multiple = FALSE, accept = "image"),
                             tags$b(helpText("Note1 :  圖片只能是JPEG檔案(.jpg/.jpeg)")),
                             tags$b(helpText("Note2 :  你需要等待一下正在預測的時間~")),
                             br(), 
                             plotOutput("plot2"),
                             br(), 
-                            verbatimTextOutput("summary2")
+                            tags$style(type='text/css', '#summary2 {background-color: rgba(250,213,154,0.6); color: rgba(57,36,3)}'),
+                            tags$b(verbatimTextOutput("summary2")),
+                            uiOutput("feedback2")
+                            
                     ),
                     
                     # Class tab content
@@ -195,6 +202,23 @@ shinyUI(
                               )
                               
                             )
+                            
+                    ),
+                    
+                    # feedback tab content
+                    tabItem(tabName = "feedback_tab",
+                            h3(HTML("&nbsp;&nbsp;&nbsp;"), tags$b("讓我們了解一下使用者對於預測狀況的反饋 (◑‿◐)")),
+                            
+                            br(),
+                            box(
+                              h4(HTML("&nbsp;"), tags$b("▼ 胸部X光左心室功能障礙預測")), status = "primary", solidHeader = TRUE, width = 5,
+                                #collapsible = TRUE,
+                                br(),
+                                tableOutput("X_table")),
+                            box(
+                              h4(HTML("&nbsp;"), tags$b("▼ 識別草帽一夥人")), status = "warning", solidHeader = TRUE,width = 4,
+                                br(),
+                                tableOutput("ONE_table"))
                             
                     )
                     
