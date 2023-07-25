@@ -110,10 +110,10 @@ shinyUI(
                                 #"Press ctrl for multiple selection", br(), 
                                 #state.name <- c("Option1", "Option2", "Option3", "Option4", "Option5"),
                                 selectInput('in1', 'multiple choice1:', state.name <- c("Option1", "Option2", "Option3", "Option4", "Option5", "Option6"), 
-                                            multiple=TRUE, selectize=FALSE),
+                                            multiple=TRUE, selectize=FALSE, selected = c("Option2", "Option3")),
                                 "Press ctrl for multiple selection",
                                 verbatimTextOutput('out1'),
-                                selectInput('in2', 'multiple choice2:', state.name, multiple=TRUE, selectize=TRUE),
+                                selectInput('in2', 'multiple choice2:', state.name, multiple=TRUE, selectize=TRUE, selected = c("Option3", "Option4", "Option5")),
                                 verbatimTextOutput('out2')
                               ),
                               
@@ -132,7 +132,7 @@ shinyUI(
                                 width = 4,
                                 checkboxGroupInput("in5", label = h3("Multiple choice3:"), 
                                                    choices = list("Choice 1" = 1, "Choice 2" = 2, "Choice 3" = 3),
-                                                   selected = 1),
+                                                   selected = c(1, 2)),
                                 verbatimTextOutput("out5"),
                                 hr(),
                                 radioButtons("in6", label = h3("Radio buttons"),
