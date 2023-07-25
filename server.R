@@ -146,7 +146,7 @@ shinyServer(function(input, output) {
       col_select <- floor((dim(resize_img)[2] - 224) / 2) + 1:224
       test_img_array[,,,1] <- resize_img[row_select,col_select,]
       
-      my_model2 = mx.model.load("test50_ONE", iteration = 0)
+      my_model2 = mx.model.load("test50_ONE_2", iteration = 0)
       pred_test <-  predict(model = my_model2, X = test_img_array, ctx = mx.gpu(5))
       
       #score <- round(pred_test[2,],4)
@@ -155,24 +155,122 @@ shinyServer(function(input, output) {
       #score <- round(pred_test[,1], 4)
       
       if( x == 1 ){
-        score <- round(pred_test[,1], 4)
-        HTML(paste0('這應該是魯夫吧！'))
+        
+        score <- round(pred_test[1,1], 2)*100
+        if( score < 51 ){
+          HTML(paste0('他/她是...魯夫?我不確定(＞x＜)'))
+        }else if ( score < 80 ) {
+          HTML(paste0('這是魯夫吧！？我只有', score,'%確定'))
+        }else if ( score == 100 ) {
+          HTML(paste0('這是魯夫吧！我百分之百確定!٩(✿∂‿∂✿)۶'))
+        }else{
+          HTML(paste0('這是魯夫吧！ 我有', score,'%確定~'))
+        }
+        
       } else if ( x == 2 ) {
-        HTML(paste0('這應該是索隆吧！'))
+        
+        score <- round(pred_test[2,1], 2)*100
+        if( score < 51 ){
+          HTML(paste0('他/她是...索隆?我不確定(＞x＜)'))
+        }else if ( score < 80 ) {
+          HTML(paste0('這是索隆吧！？我只有', score,'%確定'))
+        }else if ( score == 100 ) {
+          HTML(paste0('這是索隆吧！我百分之百確定!٩(✿∂‿∂✿)۶'))
+        }else{
+          HTML(paste0('這是索隆吧！ 我有', score,'%確定~'))
+        }
+        
       } else if ( x == 3 ) {
-        HTML(paste0('這應該是香吉士吧！'))
+        
+        score <- round(pred_test[3,1], 2)*100
+        if( score < 51 ){
+          HTML(paste0('他/她是...香吉士?我不確定(＞x＜)'))
+        }else if ( score < 80 ) {
+          HTML(paste0('這是香吉士吧！？我只有', score,'%確定'))
+        }else if ( score == 100 ) {
+          HTML(paste0('這是香吉士吧！我百分之百確定!٩(✿∂‿∂✿)۶'))
+        }else{
+          HTML(paste0('這是香吉士吧！ 我有', score,'%確定~'))
+        }
+        
       } else if ( x == 4 ) {
-        HTML(paste0('這應該是騙人布吧！'))
+        
+        score <- round(pred_test[4,1], 2)*100
+        if( score < 51 ){
+          HTML(paste0('他/她是...騙人布?我不確定(＞x＜)'))
+        }else if ( score < 80 ) {
+          HTML(paste0('這是騙人布吧！？我只有', score,'%確定'))
+        }else if ( score == 100 ) {
+          HTML(paste0('這是騙人布吧！我百分之百確定!٩(✿∂‿∂✿)۶'))
+        }else{
+          HTML(paste0('這是騙人布吧！ 我有', score,'%確定~'))
+        }
+        
       } else if ( x == 5 ) {
-        HTML(paste0('這應該是娜美吧！'))
+        
+        score <- round(pred_test[5,1], 2)*100
+        if( score < 51 ){
+          HTML(paste0('他/她是...娜美?我不確定(＞x＜)'))
+        }else if ( score < 80 ) {
+          HTML(paste0('這是娜美吧！？我只有', score,'%確定'))
+        }else if ( score == 100 ) {
+          HTML(paste0('這是娜美吧！我百分之百確定!٩(✿∂‿∂✿)۶'))
+        }else{
+          HTML(paste0('這是娜美吧！ 我有', score,'%確定~'))
+        }
+        
       } else if ( x == 6 ) {
-        HTML(paste0('這應該是喬巴吧！'))
+        
+        score <- round(pred_test[6,1], 2)*100
+        if( score < 51 ){
+          HTML(paste0('他/她是...喬巴?我不確定(＞x＜)'))
+        }else if ( score < 80 ) {
+          HTML(paste0('這是喬巴吧！？我只有', score,'%確定'))
+        }else if ( score == 100 ) {
+          HTML(paste0('這是喬巴吧！我百分之百確定!٩(✿∂‿∂✿)۶'))
+        }else{
+          HTML(paste0('這是喬巴吧！ 我有', score,'%確定~'))
+        }
+        
       } else if ( x == 7 ) {
-        HTML(paste0('這應該是羅賓吧！'))
+        
+        score <- round(pred_test[7,1], 2)*100
+        if( score < 51 ){
+          HTML(paste0('他/她是...羅賓?我不確定(＞x＜)'))
+        }else if ( score < 80 ) {
+          HTML(paste0('這是羅賓吧！？我只有', score,'%確定'))
+        }else if ( score == 100 ) {
+          HTML(paste0('這是羅賓吧！我百分之百確定!٩(✿∂‿∂✿)۶'))
+        }else{
+          HTML(paste0('這是羅賓吧！ 我有', score,'%確定~'))
+        }
+        
       } else if ( x == 8 ) {
-        HTML(paste0('這應該是弗蘭奇吧！'))
+        
+        score <- round(pred_test[8,1], 2)*100
+        if( score < 51 ){
+          HTML(paste0('他/她是...弗蘭奇?我不確定(＞x＜)'))
+        }else if ( score < 80 ) {
+          HTML(paste0('這是弗蘭奇吧！？我只有', score,'%確定'))
+        }else if ( score == 100 ) {
+          HTML(paste0('這是弗蘭奇吧！我百分之百確定!٩(✿∂‿∂✿)۶'))
+        }else{
+          HTML(paste0('這是弗蘭奇吧！ 我有', score,'%確定~'))
+        }
+        
       } else if ( x == 9 ) {
-        HTML(paste0('這應該是布魯克吧！'))
+        
+        score <- round(pred_test[8,1], 2)*100
+        if( score < 51 ){
+          HTML(paste0('他/她是...布魯克?我不確定(＞x＜)'))
+        }else if ( score < 80 ) {
+          HTML(paste0('這是布魯克吧！？我只有', score,'%確定'))
+        }else if ( score == 100 ) {
+          HTML(paste0('這是布魯克吧！我百分之百確定!٩(✿∂‿∂✿)۶'))
+        }else{
+          HTML(paste0('這是布魯克吧！ 我有', score,'%確定~'))
+        }
+        
       } else {
         HTML(paste0('這應該不是草帽一夥人?嗎?吧'))
       }
@@ -451,7 +549,6 @@ shinyServer(function(input, output) {
       colnames <- colnames(dat)
       checkboxGroupInput("choose_vars", "Columns in data to show:",
                          names(dat), selected = names(dat))
-  
     }
   })
   
@@ -465,10 +562,7 @@ shinyServer(function(input, output) {
                   columnDefs = list(list( targets = 2, width = '600px')),
                   scrollX = TRUE
     ))
-    
-  }
-  #,server = FALSE
-  )
+  })
   
   output$downloadData <- downloadHandler(
     filename = function() {
@@ -478,5 +572,98 @@ shinyServer(function(input, output) {
       data_to_download <- DATA6()[, input$choose_vars, drop = FALSE]
       write.csv(data_to_download, file, row.names = FALSE)
   })
+  
+  output$feedback1 <- renderUI({
+    if (!is.null(input$files)) {
+      radioButtons("feedback1", label = h4("我有預測正確嗎?"),
+                   #choices = c ("有捏~好棒棒", "錯了欸", "我也不知道才問你啊"), 
+                   choices = list("有捏~好棒棒" = 1, "錯了欸" = 2, "我也不知道才問你啊!" = 3, "幫我點一下吧!不要重複點歐" = 10),
+                   selected = 10, inline = TRUE)
 
+    }
+  })
+  
+  feedback_data <- reactiveValues(
+    feedback = list(correct = 0, incorrect = 0, unsure = 0)
+  )
+  
+  observe({
+    if (file.exists("feedback_data.rds")) {
+      feedback_data$feedback <- readRDS("feedback_data.rds")
+    }
+  })
+  
+  observeEvent(input$feedback1, {
+    feedback <- input$feedback1
+    if (!is.null(feedback)) {
+      if (feedback == 1) {
+        feedback_data$feedback$correct <- feedback_data$feedback$correct + 1
+      } else if (feedback == 2) {
+        feedback_data$feedback$incorrect <- feedback_data$feedback$incorrect + 1
+      } else if (feedback == 3) {
+        feedback_data$feedback$unsure <- feedback_data$feedback$unsure + 1
+      }
+      
+      saveRDS(feedback_data$feedback, "feedback_data.rds")
+    }
+  })
+  
+  output$X_table <- renderTable({
+    data.frame(
+      "回饋狀態" = c("正確", "錯誤", "不知道"),
+      "累計次數" = format(c(
+        feedback_data$feedback$correct,
+        feedback_data$feedback$incorrect,
+        feedback_data$feedback$unsure
+      ),
+      nsmall = 0)
+    )
+  })
+  
+  output$feedback2 <- renderUI({
+    if (!is.null(input$files2)) {
+      radioButtons("feedback2", label = h4("我有預測正確嗎?"),
+                   #choices = c ("有捏~好棒棒", "錯了欸", "我也不知道才問你啊"), 
+                   choices = list("有捏~好棒棒" = 4, "錯了欸" = 5, "我也不知道才問你啊!" = 6, "幫我點一下吧!不要重複點歐" = 10),
+                   selected = 10, inline = TRUE)
+    }
+  })
+  
+  feedback_data2 <- reactiveValues(
+    feedback = list(correct = 0, incorrect = 0, unsure = 0)
+  )
+  
+  observe({
+    if (file.exists("feedback_data2.rds")) {
+      feedback_data2$feedback <- readRDS("feedback_data2.rds")
+    }
+  })
+  
+  observeEvent(input$feedback2, {
+    feedback <- input$feedback2
+    if (!is.null(feedback)) {
+      if (feedback == 4) {
+        feedback_data2$feedback$correct <- feedback_data2$feedback$correct + 1
+      } else if (feedback == 5) {
+        feedback_data2$feedback$incorrect <- feedback_data2$feedback$incorrect + 1
+      } else if (feedback == 6) {
+        feedback_data2$feedback$unsure <- feedback_data2$feedback$unsure + 1
+      }
+      
+      saveRDS(feedback_data2$feedback, "feedback_data2.rds")
+    }
+  })
+  
+  output$ONE_table <- renderTable({
+    data.frame(
+      "回饋狀態" = c("正確", "錯誤", "不知道"),
+      "累計次數" = format(c(
+        feedback_data2$feedback$correct,
+        feedback_data2$feedback$incorrect,
+        feedback_data2$feedback$unsure
+      ),
+      nsmall = 0)
+    )
+  })
+  
 })
