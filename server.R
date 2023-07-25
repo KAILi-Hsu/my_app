@@ -432,10 +432,10 @@ shinyServer(function(input, output) {
   output$out4 <- renderPrint(input$in4)
   output$out5 <- renderPrint(input$in5)
   output$out6 <- renderPrint(input$in6)
-  output$out7 <- renderPrint(input$in7)
+  output$out7 <- renderPrint(HTML(input$in7))
   output$out8 <- renderPrint(input$in8)
-  output$out9 <- renderPrint(input$in9)
-  output$out10 <- renderPrint(input$in10)
+  output$out9 <- renderPrint(HTML(input$in9))
+  output$out10 <- renderPrint(HTML(input$in10))
   
   
   DATA6 <- reactive({
