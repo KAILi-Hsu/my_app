@@ -26,7 +26,7 @@ Show_img <- function (img, plot_xlim = c(0.06, 0.94), plot_ylim = c(0.94, 0.06))
 }
 
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
 
   #[分頁1]胸部X光左心室功能障礙預測
   
@@ -42,14 +42,30 @@ shinyServer(function(input, output) {
       return(img) 
     }
   })
+
+  output$plot1 <- renderUI({
+    img = IMAGE()
+    new_height <- 400
+    img_width <- dim(img)[2]
+    img_height <- dim(img)[1]
+    new_width <- round(img_width * (new_height / img_height))
+    w <- paste(new_width,"px")
+    if (is.null(input$files)) {
+      
+      plotOutput("plot1_2", width = paste0(new_width,"px"))
+      
+    } else { 
+      plotOutput("plot1_2", width = paste0(new_width,"px"))
+    }
+  })
   
-  output$plot <- renderPlot({
+  output$plot1_2 <- renderPlot({
     img = IMAGE()
     if (is.null(input$files)) {
       
       Show_img(img)
       
-    } else { 
+    } else {
       
       Show_img(img)
     }
@@ -113,7 +129,23 @@ shinyServer(function(input, output) {
     }
   })
   
-  output$plot2 <- renderPlot({
+  output$plot2 <- renderUI({
+    img = IMAGE2()
+    new_height <- 400
+    img_width <- dim(img)[2]
+    img_height <- dim(img)[1]
+    new_width <- round(img_width * (new_height / img_height))
+    w <- paste(new_width,"px")
+    if (is.null(input$files)) {
+      
+      plotOutput("plot2_2", width = paste0(new_width,"px"))
+      
+    } else { 
+      plotOutput("plot2_2", width = paste0(new_width,"px"))
+    }
+  })
+  
+  output$plot2_2 <- renderPlot({
     img = IMAGE2()
     if (is.null(input$files2)) {
       
@@ -124,6 +156,9 @@ shinyServer(function(input, output) {
       Show_img(img)
     }
   })
+  
+  
+  
   
   output$summary2 <- renderPrint({
     img = IMAGE2()
@@ -274,6 +309,8 @@ shinyServer(function(input, output) {
       } else {
         HTML(paste0('這應該不是草帽一夥人?嗎?吧'))
       }
+      
+      
       
     }
   })
@@ -575,12 +612,22 @@ shinyServer(function(input, output) {
   
   output$feedback1 <- renderUI({
     if (!is.null(input$files)) {
-      radioButtons("feedback1", label = h4("我有預測正確嗎?"),
-                   #choices = c ("有捏~好棒棒", "錯了欸", "我也不知道才問你啊"), 
-                   choices = list("有捏~好棒棒" = 1, "錯了欸" = 2, "我也不知道才問你啊!" = 3, "幫我點一下吧!不要重複點歐" = 10),
+      radioButtons("feedback1", label = h4("我有預測正確嗎? 幫我點一下按送出吧！"),
+                   choices = list("有捏~好棒棒" = 1, "錯了欸" = 2, "我也不知道才問你啊!" = 3),
                    selected = 10, inline = TRUE)
-
     }
+  })
+  
+  output$button1 <- renderUI({
+    if (!is.null(input$files)) {
+      actionButton("f1", label = "Submit")
+    } 
+  })
+  
+  output$f1_out <- renderUI({
+    if (!is.null(input$files)) {
+      htmlOutput("f1_out_show")
+    } 
   })
   
   feedback_data <- reactiveValues(
@@ -593,18 +640,34 @@ shinyServer(function(input, output) {
     }
   })
   
-  observeEvent(input$feedback1, {
-    feedback <- input$feedback1
-    if (!is.null(feedback)) {
-      if (feedback == 1) {
-        feedback_data$feedback$correct <- feedback_data$feedback$correct + 1
-      } else if (feedback == 2) {
-        feedback_data$feedback$incorrect <- feedback_data$feedback$incorrect + 1
-      } else if (feedback == 3) {
-        feedback_data$feedback$unsure <- feedback_data$feedback$unsure + 1
-      }
-      
-      saveRDS(feedback_data$feedback, "feedback_data.rds")
+  observeEvent(input$f1, {
+    num <- HTML(input$f1)
+    if (num == 1) {
+      observeEvent(input$feedback1, {
+        feedback <- input$feedback1
+        if (!is.null(feedback)) {
+          if (feedback == 1) {
+            feedback_data$feedback$correct <- feedback_data$feedback$correct + 1
+          } else if (feedback == 2) {
+            feedback_data$feedback$incorrect <- feedback_data$feedback$incorrect + 1
+          } else if (feedback == 3) {
+            feedback_data$feedback$unsure <- feedback_data$feedback$unsure + 1
+          }
+          
+          saveRDS(feedback_data$feedback, "feedback_data.rds")
+        }
+      })
+    }
+  })
+  
+  observeEvent(input$f1, {
+    num <- HTML(input$f1)
+    if (num > 1) {
+      output$f1_out_show <- renderText({
+        #paste("&nbsp;&nbsp;Warning: 你已經送出過了！謝謝你~ 再換一張圖片試試看吧！")
+        paste('<span style="font-size: 14px;">&nbsp;&nbsp;&nbsp;Warning: 你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</span>')
+        #paste('<pre style="white-space: pre-wrap;">     你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</pre>')
+      })
     }
   })
   
@@ -622,11 +685,22 @@ shinyServer(function(input, output) {
   
   output$feedback2 <- renderUI({
     if (!is.null(input$files2)) {
-      radioButtons("feedback2", label = h4("我有預測正確嗎?"),
-                   #choices = c ("有捏~好棒棒", "錯了欸", "我也不知道才問你啊"), 
-                   choices = list("有捏~好棒棒" = 4, "錯了欸" = 5, "我也不知道才問你啊!" = 6, "幫我點一下吧!不要重複點歐" = 10),
+      radioButtons("feedback2", label = h4(tags$b("我有預測正確嗎? 幫我點一下按送出吧！")),
+                   choices = list("有捏~好棒棒" = 4, "錯了欸" = 5, "我也不知道才問你啊!" = 6),
                    selected = 10, inline = TRUE)
     }
+  })
+  
+  output$button2 <- renderUI({
+    if (!is.null(input$files2)) {
+      actionButton("f2", label = "Submit")
+    } 
+  })
+  
+  output$f2_out <- renderUI({
+    if (!is.null(input$files2)) {
+      htmlOutput("f2_out_show")
+    } 
   })
   
   feedback_data2 <- reactiveValues(
@@ -639,21 +713,37 @@ shinyServer(function(input, output) {
     }
   })
   
-  observeEvent(input$feedback2, {
-    feedback <- input$feedback2
-    if (!is.null(feedback)) {
-      if (feedback == 4) {
-        feedback_data2$feedback$correct <- feedback_data2$feedback$correct + 1
-      } else if (feedback == 5) {
-        feedback_data2$feedback$incorrect <- feedback_data2$feedback$incorrect + 1
-      } else if (feedback == 6) {
-        feedback_data2$feedback$unsure <- feedback_data2$feedback$unsure + 1
-      }
-      
-      saveRDS(feedback_data2$feedback, "feedback_data2.rds")
+  observeEvent(input$f2, {
+    num <- HTML(input$f2)
+    if (num == 1) {
+      observeEvent(input$feedback2, {
+        feedback <- input$feedback2
+        if (!is.null(feedback)) {
+          if (feedback == 1) {
+            feedback_data2$feedback$correct <- feedback_data$feedback$correct + 1
+          } else if (feedback == 2) {
+            feedback_data2$feedback$incorrect <- feedback_data$feedback$incorrect + 1
+          } else if (feedback == 3) {
+            feedback_data2$feedback$unsure <- feedback_data$feedback$unsure + 1
+          }
+          
+          saveRDS(feedback_data2$feedback, "feedback_data2.rds")
+        }
+      })
     }
   })
   
+  observeEvent(input$f2, {
+    num <- HTML(input$f2)
+    if (num > 1) {
+      output$f2_out_show <- renderText({
+        #paste("<b>&nbsp;&nbsp;Warning: 你已經送出過了！謝謝你~ 再換一張圖片試試看吧！<b>")
+        paste('<span style="font-size: 14px;"><b>&nbsp;&nbsp;&nbsp;Warning: 你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</b></span>')
+        #paste('<pre style="white-space: pre-wrap;">     你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</pre>')
+      })
+    }
+  })
+
   output$ONE_table <- renderTable({
     data.frame(
       "回饋狀態" = c("正確", "錯誤", "不知道"),
