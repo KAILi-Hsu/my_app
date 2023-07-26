@@ -228,7 +228,6 @@ shinyUI(
                               h4(HTML("&nbsp;"), tags$b("▼ 識別草帽一夥人")), status = "warning", solidHeader = TRUE,width = 4,
                                 br(),
                                 tableOutput("ONE_table"))
-                           
                     )
                     
                   )
