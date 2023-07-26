@@ -665,7 +665,7 @@ shinyServer(function(input, output, session) {
     if (num > 1) {
       output$f1_out_show <- renderText({
         #paste("&nbsp;&nbsp;Warning: 你已經送出過了！謝謝你~ 再換一張圖片試試看吧！")
-        paste('<span style="font-size: 14px;">&nbsp;&nbsp;&nbsp;Warning: 你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</span>')
+        paste('<span style="font-size: 14px;">&nbsp;&nbsp;Warning: 你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</span>')
         #paste('<pre style="white-space: pre-wrap;">     你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</pre>')
       })
     }
@@ -738,7 +738,7 @@ shinyServer(function(input, output, session) {
     if (num > 1) {
       output$f2_out_show <- renderText({
         #paste("<b>&nbsp;&nbsp;Warning: 你已經送出過了！謝謝你~ 再換一張圖片試試看吧！<b>")
-        paste('<span style="font-size: 14px;"><b>&nbsp;&nbsp;&nbsp;Warning: 你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</b></span>')
+        paste('<span style="font-size: 14px;"><b>&nbsp;&nbsp;Warning: 你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</b></span>')
         #paste('<pre style="white-space: pre-wrap;">     你已經送出過回應了！謝謝你~ 再換一張圖片試試看吧！</pre>')
       })
     }
@@ -753,6 +753,18 @@ shinyServer(function(input, output, session) {
         feedback_data2$feedback$unsure
       ),
       nsmall = 0)
+    )
+  })
+  
+  output$work_portfolio <- renderUI({
+    HTML('
+      <div style="position: relative; width: 720px; height: 720px; 
+      box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+      border-radius: 8px; will-change: transform;">
+         <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFNkze057Q&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>'
     )
   })
   
