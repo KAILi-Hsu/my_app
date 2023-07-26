@@ -48,7 +48,8 @@ shinyUI(
                     menuItem(tags$b("識別草帽一夥人!"), tabName = "ONE_tab"),
                     menuItem(tags$b("二元分類器比較"), tabName = "Class_tab"),
                     menuItem(tags$b("Panel Function"), tabName = "Function_tab"),
-                    menuItem(tags$b("The feedback"), tabName = "feedback_tab")
+                    menuItem(tags$b("The feedback"), tabName = "feedback_tab"),
+                    menuItem(tags$b("My works"), tabName = "work_tab")
                   )
                 ),
                 
@@ -228,6 +229,11 @@ shinyUI(
                               h4(HTML("&nbsp;"), tags$b("▼ 識別草帽一夥人")), status = "warning", solidHeader = TRUE,width = 4,
                                 br(),
                                 tableOutput("ONE_table"))
+                           
+                    ),
+                    
+                    tabItem(tabName = "work_tab",
+                            uiOutput("work_portfolio")
                     )
                     
                   )
