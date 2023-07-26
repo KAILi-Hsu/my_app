@@ -16,7 +16,7 @@ shinyUI(
   
   dashboardPage(skin = "yellow",
                 dashboardHeader(
-                  title =  span("MY APP",target = "_blank"),
+                  title =  span(tags$b("MY APP (Designer: KAI-HSU)"),target = "_blank"),
                   #title = span(img(src = "logo3.png", height = 35), "MY APP"),
                   titleWidth = 400,
                   dropdownMenu(
@@ -44,11 +44,11 @@ shinyUI(
                 
                 dashboardSidebar(
                   sidebarMenu(
-                    menuItem("胸部X光左心室功能障礙預測", tabName = "X_tab"),
-                    menuItem("識別草帽一夥人!", tabName = "ONE_tab"),
-                    menuItem("二元分類器比較", tabName = "Class_tab"),
-                    menuItem("Panel Function", tabName = "Function_tab"),
-                    menuItem("The feedback", tabName = "feedback_tab")
+                    menuItem(tags$b("胸部X光左心室功能障礙預測"), tabName = "X_tab"),
+                    menuItem(tags$b("識別草帽一夥人!"), tabName = "ONE_tab"),
+                    menuItem(tags$b("二元分類器比較"), tabName = "Class_tab"),
+                    menuItem(tags$b("Panel Function"), tabName = "Function_tab"),
+                    menuItem(tags$b("The feedback"), tabName = "feedback_tab")
                   )
                 ),
                 
@@ -60,11 +60,16 @@ shinyUI(
                             helpText("Note1 :  圖片只能是JPEG檔案(.jpg/.jpeg)"),
                             helpText("Note2 :  你需要等待一下正在預測的時間~"),
                             br(), 
-                            plotOutput("plot"),
-                            br(), 
-                            #tags$style(type='text/css', '#summary {background-color: rgba(250,213,154,0.6); color: rgba(57,36,3)}'),
+                            uiOutput("plot1", height = "400px"),
+                            #plotOutput("plot"),
+                            br(),
                             verbatimTextOutput("summary"),
-                            uiOutput("feedback1")
+                            uiOutput("feedback1"),
+                            fluidRow(
+                              column(1, uiOutput("button1")),
+                              tags$style(type='text/css', '#f1_out {color: rgba(227,71,71)}'),
+                              column(6, uiOutput("f1_out"))    
+                            )
                             
                             #verbatimTextOutput("C_index")
                     ),
@@ -75,11 +80,17 @@ shinyUI(
                             tags$b(helpText("Note1 :  圖片只能是JPEG檔案(.jpg/.jpeg)")),
                             tags$b(helpText("Note2 :  你需要等待一下正在預測的時間~")),
                             br(), 
-                            plotOutput("plot2"),
+                            uiOutput("plot2", height = "400px"),
+                            #plotOutput("plot2"),
                             br(), 
-                            tags$style(type='text/css', '#summary2 {background-color: rgba(250,213,154,0.6); color: rgba(57,36,3)}'),
+                            tags$style(type='text/css', '#summary2 {background-color: rgba(252,251,242,0.8); color: rgba(8,46,81)}'),
                             tags$b(verbatimTextOutput("summary2")),
-                            uiOutput("feedback2")
+                            uiOutput("feedback2"),
+                            fluidRow(
+                              column(1, uiOutput("button2")),
+                              tags$style(type='text/css', '#f2_out {color: rgba(227,71,71)}'),
+                              column(9, uiOutput("f2_out"))   
+                            )
                             
                     ),
                     
@@ -219,7 +230,7 @@ shinyUI(
                               h4(HTML("&nbsp;"), tags$b("▼ 識別草帽一夥人")), status = "warning", solidHeader = TRUE,width = 4,
                                 br(),
                                 tableOutput("ONE_table"))
-                            
+                           
                     )
                     
                   )
