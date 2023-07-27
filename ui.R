@@ -49,7 +49,7 @@ shinyUI(
                     menuItem(tags$b("二元分類器比較"), tabName = "Class_tab"),
                     menuItem(tags$b("Panel Function"), tabName = "Function_tab"),
                     menuItem(tags$b("The feedback"), tabName = "feedback_tab"),
-                    menuItem(tags$b("My works"), tabName = "work_tab")
+                    menuItem(tags$b("MY Zentangle"), tabName = "P_tab")
                   )
                 ),
                 
@@ -232,12 +232,11 @@ shinyUI(
                            
                     ),
                     
-                    tabItem(tabName = "work_tab",
+                    tabItem(tabName = "P_tab",
                             uiOutput("work_portfolio")
                     )
-                    
+
                   )
                 )
   )
 )
-
