@@ -758,14 +758,60 @@ shinyServer(function(input, output, session) {
   
   output$work_portfolio <- renderUI({
     HTML('
-      <div style="position: relative; width: 720px; height: 720px; 
-      box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
-      border-radius: 8px; will-change: transform;">
-         <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
-    src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFNkze057Q&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
-  </iframe>
-</div>'
+    <h2 style="margin-left: 5px; "><b>The Zentangle by myself</b></h4>
+<div style="position: relative; width: 850px; height: 470px;
+ margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ will-change: transform; display: flex; flex-direction: row">
+    <div style="display: flex; align-items: flex-start; flex-direction: column">
+       <div style="flex-shrink: 0; width: 350px;">
+         <h4 style="margin-left: 5px; "><b>NO.43</b></h4>
+         <p style="margin-left: 5px; height: 55px;">This is my inspiration after watching the movie <b>John Wick: Chapter 4</b>, plus the painting work under a lot of pressure at that time.</p>
+       </div>
+       <iframe loading="lazy" style="width: 350px; height: 350px; border: none; padding: 0; margin: 0;
+                      border-radius: 8px; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16);"
+         src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFp0j2etRo&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+       </iframe>
+    </div>
+    
+    <div style="display: flex; align-items: flex-start; flex-direction: column;">
+       <div style="flex-shrink: 0; width: 350px;">
+          <h4 style="margin-left: 35px;"><b>NO.37</b></h4>
+          <p style="margin-left: 35px; height: 55px;">This is the work I finished after watching <b>Avatar: The Way of Water</b>, the underwater world in the movie inspired me.</p>
+       </div>
+       <iframe loading="lazy" style="width: 350px; height: 350px; border: none; padding: 0; margin: 0;
+                      border-radius: 8px; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-left: 35px;"
+       src="https://www.canva.com/design/DAFp0g-ImE0/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+       </iframe>
+    </div>
+</div>
+
+<div style="position: relative; width: 850px; height: 550px;
+ margin-top: 1em; margin-bottom: 0.9em; overflow: hidden;
+ will-change: transform; display: flex; flex-direction: row">
+    <div style="display: flex; align-items: flex-start; flex-direction: column;">
+       <div style="flex-shrink: 0; width: 350px;">
+         <h4 style="margin-left: 5px; "><b>NO.42</b></h4>
+         <p style="margin-left: 5px; height: 120px;">This is my most satisfying work in recent years. There\'s no name, but the shape in the middle that looks like the number 8 is a sort of infinite loop.</p>
+           </div>
+           <iframe loading="lazy" style="width: 350px; height: 350px; border: none; padding: 0; margin: 0;
+                      border-radius: 8px; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16);"
+         src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFp0jpMi6k&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+           </iframe>
+           </div>
+           
+           <div style="display: flex; align-items: flex-start; flex-direction: column;">
+           <div style="flex-shrink: 0; width: 350px;">
+           <h4 style="margin-left: 35px;"><b>NO.35</b></h4>
+           <p style="margin-left: 35px; height: 120px;">Inspired after watching the musical <b>Romeo and Juliet</b>, the word with the round edge in the upper left corner is an inexplicably impressive narration at the beginning \"Rien de nouveau sous la lune.\"The theater narration translation is:\"There will be no new stories under the moonlight.\"</p>
+           </div>
+           <iframe loading="lazy" style="width: 350px; height: 350px; border: none; padding: 0; margin: 0;
+                      border-radius: 8px; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-left: 35px;"
+         src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFp0jGK8qY&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+           </iframe>
+    </div>
+</div>
+'
     )
   })
-  
+      
 })
