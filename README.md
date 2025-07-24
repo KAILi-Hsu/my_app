@@ -2,20 +2,37 @@
 
 Record my CODE.
 
-一個使用shiny並且使用shinydashboard編寫的APP。
-內容主要有四個側邊欄頁：
-1. 胸部X光左心室功能障礙預測：上傳一張胸部X光片，看模型是否判斷此人是否有左心室功能障礙。
-2. 識別草帽一夥人!：上傳照片，看看模型認出這張照片是草帽一夥中的誰？(僅包含魯夫、索隆、香吉士、騙人布、娜美、喬巴、羅賓、弗蘭奇、布魯克，9人)
-3. 二元分類器比較：上傳文件，選擇目標變量和預測變量，比較四個模型的AUC。(四個模型分別是:線性區別分析(Linear Discriminant Analysis，LDA）、羅吉斯迴歸（Logistic regression）、單純貝氏分類器（Naïve Bayes Classification）與K-近鄰演算法（K-nearest neighbors, KNN））
-4. Panel Function：練習使用box和tabBox將一些常用的ControlPanel，包括單選、多選、slider、時間選擇、上傳文件、table呈現、下載檔案等。
-5. The feedback:記錄前兩個預測分頁使用者回報預測狀況累計。
+這是一個使用 Shiny 搭配 shinydashboard 製作的應用程式，包含以下五個主要功能分頁：
 
-An APP written using shiny and specifically using shinydashboard.
-The content mainly has four sidebarpages:
-1. Chest X-ray prediction of left ventricular dysfunction: upload a chest X-ray and see if the model judges whether the person has left ventricular dysfunction.
-2. Identify the Straw Hat Crew: Upload a photo and see who the model recognizes that this picture is whom in the Straw Hat Crew? (Only including Luffy, Zoro, Sanji, Boo, Nami, Chopper, Robin, Franky, Brook, 9 people.)
-3. Binary classifier comparison: upload the file, and select the target and predictor variables, and compare the AUC of the four models. (The four models are: Linear Discriminant Analysis (LDA), Logistic regression, Naïve Bayes Classification and K-nearest neighbors (KNN).)
-4. Panel Function: Practice using box and tabBox to put some commonly used ControlPanel functions in shiny, including single selection, multi-selection, slider, time selection, uploading files, table presentation, and downloading files.
-5. The feedback:Record the accumulated user feedback on the first two prediction tabs.
+1.胸部X光左心室功能障礙預測: 
+上傳一張胸部X光影像，模型將預測該個體是否有左心室功能障礙。
+
+2.識別草帽一夥人！: 
+上傳一張人物照片，模型將辨識此人是否為草帽海賊團成員，並指出是誰。（僅包含九位角色：魯夫、索隆、香吉士、騙人布、娜美、喬巴、羅賓、弗蘭奇、布魯克）
+
+3.二元分類器比較: 
+上傳資料檔案，選擇目標變數與預測變數，系統將比較四種二元分類模型的 AUC 表現。(四種二元分類模型為: 線性判別分析（Linear Discriminant Analysis, LDA）,羅吉斯迴歸（Logistic Regression）, 單純貝氏分類器（Naïve Bayes Classification）, K-近鄰演算法（K-Nearest Neighbors, KNN）
+
+4.Panel Function 練習區: 
+練習使用 box 與 tabBox 元件，包含以下常用控制項目：單選、多選、滑桿（slider）、時間選擇器、檔案上傳、資料表顯示與下載等。
+
+5.使用者回饋（The Feedback）: 
+統計並顯示使用者在前兩個預測功能頁面中所回報的預測結果與使用經驗。
+
+
+This is an application built with Shiny and shinydashboard, featuring five main functional tabs:
+
+1.Chest X-ray Left Ventricular Dysfunction Prediction: Upload a chest X-ray image, and the model will predict whether the individual has left ventricular dysfunction.
+
+2.Identify the Straw Hat Crew!: Upload a photo, and the model will identify if the person belongs to the Straw Hat Pirates, and if so, which member it is.
+(Limited to 9 characters: Luffy, Zoro, Sanji, Usopp, Nami, Chopper, Robin, Franky, and Brook)
+
+3.Binary Classifier Comparison: Upload a dataset, select the target variable and predictor variables, and the system will compare the AUC performance of four binary classification models. (model include Linear Discriminant Analysis (LDA), Logistic Regression, Naïve Bayes Classification, K-Nearest Neighbors (KNN)
+
+4. Panel Function Practice Area
+Practice using box and tabBox components, featuring commonly used control elements such as: radio buttons, checkboxes, sliders, date/time selectors, file upload, data table display, and file downloads.
+
+5.User Feedback
+Collects and displays user-reported prediction results and experiences from the first two prediction tabs.
 
 
